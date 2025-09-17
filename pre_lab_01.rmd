@@ -48,6 +48,7 @@ The library function loads an R library such as the tidyverse, providing access 
 
 ```{r}
 number <- 2
+
 ```
 
 Then type this code to multiply the variable called number by itself.
@@ -58,7 +59,7 @@ number * number
 
 What does it return? Type your answer below:
 
-**Answer:**
+**Answer: 4**
 
 ### Task 3: Install packages
 
@@ -108,10 +109,11 @@ Once it loads, look at the environment window at right in RStudio for umd_course
 glimpse(umd_courses)
 ```
 
-In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). **Answer**
+In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). **Answer CHR and DBL**
 
-### Task 7: Examine data "head" 
-id is character and seats is 
+### Task 7: Examine data "head"
+
+id is character and seats is
 
 **Task** Run the following codeblock to use head() to examine the first six rows of data. Explore the data by clicking the black arrow on the right side of the output table, allowing you to examine additional columns.
 
@@ -143,9 +145,7 @@ umd_courses |>
 
 Describe what you think each line of this code is doing below, based on the result:
 
-**Answer**
-It is counting the amount of classes by term
-### Task 10: Adding arrange to sort the data
+**Answer** It is ordering the amount of classes by term \### Task 10: Adding arrange to sort the data
 
 **Task** Run the following codeblock:
 
@@ -155,10 +155,10 @@ umd_courses |>
   summarise(
     count_classes = n()
   ) |>
-  arrange(desc(count_classes))
+  arrange(count_classes)
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer It changed the class count to ascending, which meant it is no longer ordered by year**
 
 ### Task 11: Grouping by multiple columns
 
@@ -175,7 +175,7 @@ umd_courses |>
 
 Compared to the previous codeblock, how did the output change and what in the code changed it?
 
-**Answer**
+**Answer It grouped by both term and department, the group by (term, department) changed the code**
 
 ### Task 12: Other summary functions
 
@@ -191,7 +191,7 @@ umd_courses |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer The number of seats has been included which now sorts the sheet in ascending order of seats.**
 
 ### Task 13: different kinds of summarizations
 
@@ -224,7 +224,9 @@ umd_courses |>
     mean_seats = mean(seats),
     median_seats = median(seats),
     # add minimum seats here
+    minimum_seats = min(seats),
     # add maximum seats here
+    maximum_seats = max(seats),
   ) |>
   arrange(desc(total_seats))
 ```
@@ -239,8 +241,8 @@ No code here; I want you to provide three questions that this data suggests to y
 
 **Answer**
 
-1.  
+1.  Which instructor teaches the most classes each term and how many people take those classes?
 
-2.  
+2.  Which classes are taught year-round and which classes are only taught in certain terms?
 
-3.  
+3.  Which department has the highest concentration of classes with more than 100 seats?
