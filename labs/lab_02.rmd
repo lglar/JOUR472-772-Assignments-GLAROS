@@ -32,9 +32,11 @@ maryland_expenses <- read_csv("data/maryland_expenses.csv")
 
 ## Answer questions
 
-**Q1.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most? **A1.**
+**Q1.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most?
 
-32 departments have offered the courses with "Climate" in the title with at least one seat and the Atmospheric and Oceanic Science.
+**A1.**
+
+32 departments have offered the courses with "Climate" in the title with at least one seat and the Atmospheric and Oceanic Science department has offered the most.
 
 ```{r}
 umd_courses |> 
@@ -47,19 +49,21 @@ arrange(desc(title_count))
 
 ```
 
-**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why? **A2.**
+**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why?
+
+**A2.**
 
 I find it interesting that Teaching and Learning, Policy and Leadership has offered so many classes relating to climate because I didn't expect there to be much of a relationship between climate and teaching, although maybe the classes are referring to "teaching climate" as in the attitudes and behaviors in teaching as opposed to "environmental" climate.
 
 **Q3** Which departments offered the most courses in the Fall 2024 term? And which departments in that term have at least one syllabus posted? Answer both of those questions and then compare the top five departments - how are they different?
+
+**A3.**
 
 a\. Business and Management, School of Music, Information Studies
 
 b\. Business and Management, Economics, School of Music
 
 c\. The top five are mostly the same, with Business and Management maintaining the top spot and the school of music and information studies still being in the top five. However English and Teaching and Learning, Policy and Leadership, while on the top five for courses offered overall, are not top five in classes with the most courses that have at least one syllabus. Economics isn't in the top five for courses offered, but gets added to the list when the variable of syllabus number is added, and it's the same for engineering, professional masters.
-
-**A3.**
 
 ```{r}
 umd_courses |> 
@@ -80,7 +84,9 @@ arrange(desc(title_count))
 
 ```
 
-**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr, saving the result as a new dataframe. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name, and we're not looking in payee_name). Write a sentence describing the pattern of spending over time. **A4. Moore's committee drastically increased their spending from May to June 2021, and then mostly spending over \$20,000 but increasing to around 40,000 later in early 2022.**
+**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr, saving the result as a new dataframe. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name, and we're not looking in payee_name). Write a sentence describing the pattern of spending over time.
+
+**A4.** Moore's committee drastically increased their spending from May to June 2021, and then mostly spending over \$20,000 but increasing to around 40,000 later in early 2022.
 
 ```{r}
 maryland_expenses_copy <- maryland_expenses |> mutate(expenditure_date=mdy(expenditure_date))
@@ -94,12 +100,37 @@ mutate(month = floor_date(expenditure_date, "month")) |>
   
 ```
 
-**Q5.** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record spent money in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for all others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe). **A5**
+**Q5.** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record spent money in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for all others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe).
+
+**A5** More money was spent in Maryland than out, but the amount spent outside was still in the tens of millions, so the expenditure was still significant.\$77731788 was spent in-state while \$51565766 was spent out of state.
 
 ```{r}
+maryland_expenses_by_location <- maryland_expenses |> 
+  mutate(
+    spending_location = case_when(
+        str_detect(address, " Maryland ") ~ "In-state",
+        .default = "Out of state"
+      )
+  )
 ```
 
-**Q6.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab. **A6.**
+```{r}
+maryland_expenses_by_location |>
+  filter(amount >= "0")|>
+  group_by(spending_location) |>
+  summarize(total = sum(amount)) |>
+  arrange(desc(total))
+
+```
+
+**Q6.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab.
+
+**A6.** How many classes in the Fall 2019 semester had more than or equal to 50 sections?
+
+4 classes
 
 ```{r}
+umd_courses |>
+  filter(sections >= 50) |> filter(term == 201908)
+
 ```
