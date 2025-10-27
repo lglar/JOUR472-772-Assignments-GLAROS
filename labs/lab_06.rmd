@@ -93,7 +93,7 @@ Which zip code has the highest rate of calls per 1,000 people? Find the neighbor
 
 A3.
 
-The zip codes are mostly concentrated in the center-west of the city.
+The zip codes are mostly concentrated in the center-west of the city. The zip code with the highest rate of calls per 1000 is 21217 with a rate of around 20.9, and one of the neighborhoods is Penn North which has 37111 people and 81.5% are under 18 and 70% rent.
 
 ```{r}
 bmore_911_y_dem |>
@@ -106,13 +106,36 @@ rt_per_1000_bmore <- bmore_911_y_dem |>
 filter(pct_under_18 >= 75)|>
 group_by(zip_code, population) |>
 summarize(call_count=n())|>
-mutate(rt_per_1000 = (call_count / population)* 1000 )
- 
+mutate(rt_per_1000 = (call_count / population)* 1000 )|>
+arrange(desc(rt_per_1000))
+
+rt_per_neigh <- bmore_911_y_dem |>
+filter(zip_code == 21217) |>
+filter(pct_under_18 >= 75)|>
+group_by(zip_code, population, neighborhood, pct_under_18, pct_rent) |>
+summarize(call_count=n())|>
+mutate(rt_per_1000 = (call_count / population)* 1000 )|>
+arrange(desc(rt_per_1000))
+
+
+
+
+
+
 ```
 
 Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call data in your work.
 
-A4:
+What is the neighborhood with the most overdoses where the population is over 50% homeowners.
+
+A4: Curtis Bay
 
 ```{r}
+bmore_911_y_dem |>
+filter(pct_homeowner > 50) |>
+group_by(neighborhood, pct_homeowner) |>
+summarize(call_count=n()) |>
+arrange(desc(call_count))
+
+  
 ```
