@@ -32,7 +32,8 @@ library(stringr)
 You MUST do the following things when answering this question: \* Load the md_gov_county.csv and md_gov_county_18.csv files from the data folder \* Join those dataframes, specifying the join column. \* Add columns to generate percentages for Cox and Hogan. \* Export that joined dataframe to a CSV file using `write_csv`. \* Using that exported CSV, make a chart with Datawrapper. What kind of chart is up to you, so experiment with a few kinds of charts to see what answers the question above in the clearest way. Your chart MUST: \* Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect. \* Easily readable labels and values \* Publish your chart \* Describe your thought process below - why you chose to make the chart you did - and add the URL of your chart.
 
 **A1.**
-
+https://datawrapper.dwcdn.net/iMbj5/1/
+I decided to do a range plot because it would show the decent differences between what the two recieved in their elections.
 ```{r}
 md_gov_county <- read_csv("data/md_gov_county.csv")|> clean_names()
 md_gov_county18 <- read_csv("data/md_gov_county_18.csv")|> clean_names() 
@@ -40,7 +41,7 @@ md_gov_county_last8 <- md_gov_county |> full_join(md_gov_county18, join_by(count
 
 md_gov_county_last8 <- md_gov_county_last8 |>
 mutate(total_22 = cox + moore +lashar + wallace + harding + write_ins.x, pct_cox = (cox / (total_22)* 100)) |>
-mutate(total_18 = hogan + jealous + quinn + schlakman + write_ins.y, pct_hogan = (hogan/ total_18)*100 
+mutate(total_18 = hogan + jealous + quinn + schlakman + write_ins.y, pct_hogan = (hogan/ (total_18))*100 
 ) 
 
 write_csv(md_gov_county_last8, "data/md_gov_county_last8_expanded.csv")
@@ -81,6 +82,14 @@ write_csv(md_votes_by_type, "data/md_votes_by_type_expanded.csv")
 What do you think the story here is, and what would you want to know more about? Put the answer below along with the URL of your map.
 
 **A3.**
+https://datawrapper.dwcdn.net/oHAim/2/
+I think the story is that zip codes near the center of the county and in the southeast have higher rates of 911 calls, and I would like to know more about the income level of these areas.
 
 ```{r}
+monty_overdoses_22 <- read_csv("data/montgomery_2022_overdoses.csv")|> clean_names()
+monty_overdoses_22_ext <- monty_overdoses_22 |>
+group_by(zip) |>
+summarize(total_calls = n()) |>
+mutate(pct = (total_calls/sum(total_calls))*100)
+write_csv(monty_overdoses_22_ext, "data/monty_overdoses_22_ext.csv")
 ```
